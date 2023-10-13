@@ -4,9 +4,9 @@
 
 <img src="https://img.shields.io/badge/language-JavaScript-F1E05A"/>
 
-<img alt="License" src="https://img.shields.io/github/license/xiong35/Flicker-FE?color=64EDAC">
+<img alt="License" src="https://img.shields.io/github/license/raxskle/MyChat-Server?color=64EDAC">
 
-<img alt="last-commit" src="https://img.shields.io/github/last-commit/raxskle/MyChat-Server/main?color=FFFFFF"/>
+<img alt="last-commit" src="https://img.shields.io/github/last-commit/raxskle/MyChat-Server/main?color=FEFEFE"/>
 
 <img alt="repo-size" src="https://img.shields.io/github/repo-size/raxskle/MyChat-Server?color=blue"/>
 
