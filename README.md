@@ -6,7 +6,9 @@
 
 <img alt="License" src="https://img.shields.io/github/license/xiong35/Flicker-FE?color=64EDAC">
 
-<img alt="last-commit" src="https://img.shields.io/github/last-commit/raxskle/MyChat-Server/main?color=64EDAC"/>
+<img alt="last-commit" src="https://img.shields.io/github/last-commit/raxskle/MyChat-Server/main?color=FFFFFF"/>
+
+<img alt="repo-size" src="https://img.shields.io/github/repo-size/raxskle/MyChat-Server?color=blue"/>
 
 </p>
 
