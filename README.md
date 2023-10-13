@@ -1,4 +1,4 @@
-# MyChat Server
+<h1 align="center">MyChat Server</h1>
 
 <p align="center">
 
