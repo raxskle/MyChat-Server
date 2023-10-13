@@ -33,7 +33,7 @@ const Users = mongoose.model("Users", UserSchema);
 // newUser.save();
 
 // 查找
-// Users.find({ name: "raxskle" }).then((data) => {
+// Users.findOne({ name: "raxskle" }).then((data) => {
 //   console.log("1: ", data[0]);
 //   const targetId = data[0]._id;
 //   Users.find({ _id: targetId }).then((data2) => {
@@ -47,7 +47,7 @@ const Users = mongoose.model("Users", UserSchema);
 // });
 
 // 更新
-// Users.updateOne({ id: "ccc" }, { friends: ["aaa"] }).then((data) => {
+// Users.updateOne({ id: "ccc" }, { friends: ["ddd"] }).then((data) => {
 //   console.log(data);
 // });
 

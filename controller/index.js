@@ -3,7 +3,7 @@ const { Response } = require("../config/index.js");
 const { Users } = require("../mongodb/index.js");
 
 const test = (req, res) => {
-  res.send("Hello World!");
+  res.send(Response("Hello World!"));
 };
 
 // params: userId, password
@@ -12,12 +12,12 @@ const test = (req, res) => {
 const login = (req, res) => {
   const { id, password } = req.query;
 
-  Users.find({ id: id }).then((data) => {
-    if (data.length > 0 && data[0]) {
+  Users.findOne({ id: id }).then((data) => {
+    if (data) {
       // 有账号，判断密码，返回
-      if (data[0].password == password) {
+      if (data.password == password) {
         // 密码正确
-        res.send(Response("密码正确，返回用户信息", data[0]));
+        res.send(Response("密码正确，返回用户信息", data));
       } else {
         // 密码错误
         res.send(Response("密码错误"));
@@ -42,16 +42,39 @@ const login = (req, res) => {
 };
 
 // params: userId, friendId
-const addFriend = (req, res) => {
+const addFriend = async (req, res) => {
   const { user_id, friend_id } = req.query;
 
-  Users.find({ id: user_id }).then((data) => {
-    if (data.length > 0 && darta[0]) {
-    } else {
-      // 没找到用户
-      res.send(Response("不存在该用户"));
+  const user1 = await Users.findOne({ id: user_id });
+  const user2 = await Users.findOne({ id: friend_id });
+
+  if (user1 && user2) {
+    if (user1.friends.includes(user2.id)) {
+      // 已经是好友
+      res.send(Response("已经是好友"));
+      return;
     }
-  });
+
+    await Users.updateOne(
+      { id: user_id },
+      {
+        friends: [...user1.friends, friend_id],
+        chats: { ...user1.chats, [friend_id]: [] },
+      }
+    );
+    await Users.updateOne(
+      { id: friend_id },
+      {
+        friends: [...user2.friends, user_id],
+        chats: { ...user2.chats, [user_id]: [] },
+      }
+    );
+    const ack = await Users.find({ id: user_id });
+    res.send(Response("增加好友成功", ack[0]));
+  } else {
+    // 没找到用户
+    res.send(Response("不存在该用户"));
+  }
 };
 
 module.exports = { test, login, addFriend };
