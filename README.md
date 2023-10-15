@@ -16,7 +16,7 @@
 
 腾讯微信客户端开发菁英班结课作业，实现一个迷你即时聊天应用。
 
-基于 Node.js + WebSocket 实现服务端。
+基于 Node.js + WebSocket 实现服务端，数据库使用 MongoDB。
 
 ## Features
 

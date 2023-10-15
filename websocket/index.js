@@ -16,6 +16,7 @@ const runSocket = () => {
     console.log("连接成功");
 
     // 登陆上线准备通信
+    // params: id
     socket.on("online", (userId) => {
       socket.user = userId;
       // 保存socket id
@@ -29,6 +30,7 @@ const runSocket = () => {
     });
 
     // 离线不再接收信息
+    // params: id
     socket.on("offline", (userId) => {
       console.log("离开");
       delete clients[userId];
@@ -38,6 +40,7 @@ const runSocket = () => {
     // client 发送 私聊信息给用户，前提条件：双方已经添加好友
     // 当接收者在线时，会用socket发送信息
     // 会将聊天记录保存在双方的chats数据字段中
+    // params: data:{to, from, content}
     socket.on("sendMsg", async (data) => {
       // 查找对应在线socket，直接发送给对方
       console.log("send hello", data);

@@ -17,10 +17,10 @@ const login = (req, res) => {
       // 有账号，判断密码，返回
       if (data.password == password) {
         // 密码正确
-        res.send(Response("密码正确，返回用户信息", data));
+        res.send(Response("密码正确，登录成功", data));
       } else {
         // 密码错误
-        res.send(Response("密码错误"));
+        res.send(Response("用户名或密码错误"));
       }
     } else {
       // 无账号，创建账号并返回信息
@@ -70,7 +70,7 @@ const addFriend = async (req, res) => {
       }
     );
     const ack = await Users.find({ id: user_id });
-    res.send(Response("增加好友成功", ack[0]));
+    res.send(Response("增加好友成功，返回本用户", ack[0]));
   } else {
     // 没找到用户
     res.send(Response("不存在该用户"));
