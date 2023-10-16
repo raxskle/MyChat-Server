@@ -51,7 +51,7 @@ const addFriend = async (req, res) => {
   if (user1 && user2) {
     if (user1.friends.includes(user2.id)) {
       // 已经是好友
-      res.send(Response("已经是好友"));
+      res.send(Response("对方和你已经是好友"));
       return;
     }
 
@@ -70,11 +70,35 @@ const addFriend = async (req, res) => {
       }
     );
     const ack = await Users.find({ id: user_id });
-    res.send(Response("增加好友成功，返回本用户", ack[0]));
+    res.send(Response("添加好友成功", ack[0]));
   } else {
     // 没找到用户
     res.send(Response("不存在该用户"));
   }
 };
 
-module.exports = { test, login, addFriend };
+// users数组 =》friends信息数组
+const filterFriendInfo = (data) => {
+  return data.map((item) => {
+    return {
+      id: item.id,
+      name: item.name,
+      avator: item.avator,
+    };
+  });
+};
+
+// 用户需要知道朋友的某些信息，但是在user的friend字段里加就太臃肿
+// 根据id搜索用户也是调用该接口
+// params: friends[]
+// response: {id, name, avator}[]
+const getFriendInfo = (req, res) => {
+  const { friends } = req.query;
+  const friendIds = JSON.parse(friends);
+
+  Users.find({ id: friendIds }).then((data) => {
+    res.send(Response("得到 friends 信息", filterFriendInfo(data)));
+  });
+};
+
+module.exports = { test, login, addFriend, getFriendInfo };
