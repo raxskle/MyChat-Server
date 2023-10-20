@@ -5,6 +5,7 @@ const {
   addFriend,
   getFriendInfo,
   uploadAvator,
+  updateName,
 } = require("../controller/index");
 const { Users } = require("../mongodb");
 const { Response } = require("../config");
@@ -21,6 +22,8 @@ router.get("/add_friend", addFriend);
 router.get("/get_friend_info", getFriendInfo);
 
 router.post("/upload_avator", uploadAvator);
+
+router.get("/update_name", updateName);
 
 // 管理数据库接口
 

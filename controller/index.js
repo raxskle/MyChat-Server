@@ -116,4 +116,24 @@ const uploadAvator = async (req, res) => {
   res.send(Response("upload image", req.body.base64));
 };
 
-module.exports = { test, login, addFriend, getFriendInfo, uploadAvator };
+const updateName = async (req, res) => {
+  const { name, id } = req.query;
+  const updateResult = await Users.updateOne(
+    { id: id },
+    {
+      name: name,
+    }
+  );
+  console.log(updateResult, name, id);
+
+  res.send(Response("update name", name));
+};
+
+module.exports = {
+  test,
+  login,
+  addFriend,
+  getFriendInfo,
+  uploadAvator,
+  updateName,
+};
