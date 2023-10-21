@@ -1,5 +1,5 @@
 const express = require("express");
-const { Users } = require("../mongodb");
+const { Users, Groups } = require("../mongodb");
 const { Response } = require("../config");
 
 // 返回user所有信息
@@ -26,6 +26,7 @@ const insertChat = async (req, res) => {
     time: Date.now(),
     userid: userId1,
     content: chat,
+    type: "text",
   };
   console.log(data);
   const user1 = await Users.findOne({ id: userId1 });
@@ -55,4 +56,18 @@ const insertChat = async (req, res) => {
   res.send(Response("insert msg success", req.query, data));
 };
 
-module.exports = { getAll, deleteUser, insertChat };
+const getAllGroup = async (req, res) => {
+  Groups.find().then((data) => {
+    res.send(data);
+  });
+};
+
+// 删除群组，仅删除Groups中数据，没有改User中数据
+const deleteGroup = async (req, res) => {
+  console.log(req.query);
+  Groups.deleteOne({ id: req.query.id }).then((data) => {
+    res.send(Response("删除群组成功", data));
+  });
+};
+
+module.exports = { getAll, deleteUser, insertChat, getAllGroup, deleteGroup };

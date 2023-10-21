@@ -17,11 +17,26 @@ const UserSchema = mongoose.Schema(
     avator: String,
     friends: [],
     chats: Object,
+    groups: [],
+    groupChats: Object,
   },
   { collection: "Users" }
 );
 
 const Users = mongoose.model("Users", UserSchema);
+
+const GroupSchema = mongoose.Schema(
+  {
+    _id: mongoose.Schema.Types.ObjectId,
+    id: String,
+    name: String,
+    member: Array,
+    groupChats: Array, // 暂时无用，群聊数据存在每个member的groupChats字段中
+  },
+  { collection: "Groups" }
+);
+
+const Groups = mongoose.model("Groups", GroupSchema);
 
 // 增加
 // const newUser = new Users({
@@ -51,4 +66,4 @@ const Users = mongoose.model("Users", UserSchema);
 //   console.log(data);
 // });
 
-module.exports = { Users };
+module.exports = { Users, Groups };
