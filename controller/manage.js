@@ -27,6 +27,7 @@ const insertChat = async (req, res) => {
     userid: userId1,
     content: chat,
     type: "text",
+    checked: false,
   };
   console.log(data);
   const user1 = await Users.findOne({ id: userId1 });

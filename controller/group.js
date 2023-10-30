@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require("uuid");
 const { Groups, Users } = require("../mongodb");
 const { ObjectId } = require("mongoose").Types;
 const { Response } = require("../config/index.js");
-const { joinRoom } = require("../websocket");
+const { joinRoom, notifyAddGroup } = require("../websocket");
 
 // 新增群组
 const createGroup = async (req, res) => {
@@ -15,7 +15,7 @@ const createGroup = async (req, res) => {
     id: id,
     name: name,
     member: member,
-    groupChats: [],
+    groupChats: [], // 暂时无用
   });
   const msg = await newGroup.save();
   console.log("新增群组成功", msg);
@@ -47,10 +47,10 @@ const createGroup = async (req, res) => {
 
   await Promise.all(list);
 
-  // 如果member的socket在线，那么就将其join room
+  // 通知member加入了group
   member.forEach((memberId) => {
-    console.log("join room", memberId, id);
-    joinRoom(memberId, id);
+    console.log("notifyCreateGroup", memberId, id);
+    notifyAddGroup(memberId, newGroup);
   });
 
   console.log("新增群组成功");

@@ -77,6 +77,7 @@ const runSocket = () => {
         userid: data.from,
         content: data.content,
         type: data.type,
+        checked: false,
       };
       console.log(chat);
       const sender = await Users.findOne({ id: data.from });
@@ -131,6 +132,7 @@ const runSocket = () => {
         userid: speaker,
         content: content,
         type: type,
+        checked: false,
       };
       console.log(chat);
 
@@ -148,7 +150,7 @@ const runSocket = () => {
             },
           }
         );
-        console.log("更改成功", user.id);
+        console.log("groupChat 添加成功", user.id);
       });
 
       await Promise.all(list);
@@ -159,6 +161,31 @@ const runSocket = () => {
       console.log("sendMsg Finish");
     });
 
+    // 已读与某user或某group的所有消息
+    socket.on("checkAllChat", async (data) => {
+      const { type, userId, targetId } = data;
+
+      console.log("checkAllChat", type, userId, targetId);
+      const user = await Users.findOne({ id: userId });
+      // 将checked状态全设为true
+      const checkedChats = [...user[type][targetId]].map((chat) => {
+        return {
+          ...chat,
+          checked: true,
+        };
+      });
+      const res = await Users.updateOne(
+        { id: userId },
+        {
+          [type]: {
+            ...user[type],
+            [targetId]: checkedChats,
+          },
+        }
+      );
+      console.log("checkAllChat finish");
+    });
+
     // 断开socket，并无作用
     socket.on("disconnect", () => {
       console.log("离开");
@@ -167,7 +194,7 @@ const runSocket = () => {
 };
 
 // params: userId
-// 如果userId对应的socket在线，那么加入
+// 如果userId对应的socket在线，那么加入room，准备接收群组信息
 const joinRoom = (userId, groupId) => {
   if (clients[userId]) {
     // socket在线
@@ -177,4 +204,33 @@ const joinRoom = (userId, groupId) => {
   }
 };
 
-module.exports = { runSocket, server, joinRoom };
+// 通知新加入group
+// send: 整个group数据
+const notifyAddGroup = (userId, group) => {
+  if (clients[userId]) {
+    const socketId = clients[userId];
+    // 通知加入group
+    io.sockets.sockets.get(socketId).emit("addGroup", group);
+    // 加入room接收信息
+    joinRoom(userId, group.id);
+  }
+};
+
+// 通知新加朋友
+// send: 整个friendInfo
+const notifyAddFriend = (userId, friendInfo) => {
+  if (clients[userId]) {
+    const socketId = clients[userId];
+    // 通知加入group
+    console.log("notify addFriend", friendInfo);
+    io.sockets.sockets.get(socketId).emit("addFriend", friendInfo);
+  }
+};
+
+module.exports = {
+  runSocket,
+  server,
+  joinRoom,
+  notifyAddGroup,
+  notifyAddFriend,
+};
